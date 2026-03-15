@@ -1,40 +1,545 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Il mondo digitale non è sostenibile</title>
-    <link rel="stylesheet" href="CSS/styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sicilia — Scopri l'Isola</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+<style>
+
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#edeaf2;font-family:'Lato','Helvetica Neue',sans-serif;-webkit-font-smoothing:antialiased}
+
+/* ── Layout base ── */
+:root{
+  --max:430px;
+  --purple-light:#c8aee0;
+  --purple-mid:#9080c0;
+  --purple-dark:#5a4a8a;
+  --text:#1a1a1a;
+  --text-light:#666;
+  --label:#9a9ac0;
+  --radius:20px;
+}
+
+/* ── Pages ── */
+.page{
+  display:none;
+  min-height:100vh;
+  max-width:var(--max);
+  margin:0 auto;
+  background:#fff;
+  box-shadow:0 0 48px rgba(0,0,0,.12);
+  position:relative;
+  overflow-x:hidden;
+}
+.page.active{display:block}
+
+@media(min-width:500px){
+  body{padding:32px 0}
+  .page{border-radius:38px;min-height:calc(100vh - 64px)}
+}
+
+/* ══════════════════════════════
+   HOME
+══════════════════════════════ */
+.home-header{
+  text-align:center;
+  padding:30px 20px 6px;
+}
+.home-title{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:2rem;font-weight:400;
+  letter-spacing:.2em;color:#b8b8d0;
+  text-transform:uppercase;
+}
+
+/* info */
+.home-info{padding:14px 20px 6px}
+.info-tag{display:block;font-size:.72rem;font-weight:300;color:var(--label);margin-bottom:4px}
+.info-body{font-size:.78rem;font-weight:300;color:var(--text-light);line-height:1.65}
+
+/* ── Featured box ── */
+.featured-box{
+  margin:18px 16px 0;
+  border:1.5px dashed var(--purple-light);
+  border-radius:var(--radius);
+  padding:12px 10px 10px;
+}
+.featured-heading{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1rem;font-style:italic;font-weight:400;
+  color:#b0a0d0;margin-bottom:10px;padding-left:2px;
+}
+
+/* ── Carousel ── */
+.carousel-wrap{display:flex;align-items:center;gap:6px}
+.c-btn{
+  flex-shrink:0;width:32px;height:32px;
+  background:#fff;border:1.5px solid var(--purple-light);
+  border-radius:50%;font-size:1rem;color:#888;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s,color .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.10);
+  user-select:none;
+}
+.c-btn:hover{background:var(--purple-light);color:#fff}
+.c-btn:active{transform:scale(.93)}
+
+.c-viewport{flex:1;overflow:hidden;border-radius:16px}
+.c-track{
+  display:flex;
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
+}
+.c-slide{
+  min-width:100%;position:relative;
+  aspect-ratio:16/9;overflow:hidden;border-radius:16px;
+}
+.c-slide img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .5s ease;
+}
+.c-slide:hover img{transform:scale(1.04)}
+
+/* label overlay */
+.c-label{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:32px 44px 13px;
+  background:linear-gradient(to top,rgba(0,0,0,.55),transparent);
+  color:#fff;
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1rem;font-style:italic;
+  text-align:center;text-decoration:none;
+  display:flex;align-items:flex-end;justify-content:center;gap:8px;
+  cursor:pointer;
+  transition:background .2s;
+}
+.c-label::after{content:'→';font-style:normal;font-family:'Lato',sans-serif;opacity:.85}
+.c-label:hover{background:linear-gradient(to top,rgba(90,74,138,.6),transparent)}
+
+/* dots */
+.c-dots{display:flex;justify-content:center;gap:7px;margin-top:10px}
+.c-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#d8d0ec;cursor:pointer;
+  transition:background .2s,transform .2s;
+}
+.c-dot.on{background:var(--purple-mid);transform:scale(1.25)}
+
+/* ── Attività ── */
+.activities{padding:20px 16px 40px}
+.act-title{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1rem;font-style:italic;
+  color:#8080aa;margin-bottom:12px;padding-left:2px;
+}
+.act-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.act-card{
+  border-radius:16px;overflow:hidden;
+  aspect-ratio:1/1;cursor:pointer;
+  box-shadow:0 3px 14px rgba(0,0,0,.10);
+  transition:transform .2s,box-shadow .2s;
+}
+.act-card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.15)}
+.act-card img{width:100%;height:100%;object-fit:cover;display:block}
+
+
+/* ══════════════════════════════
+   PARK DETAIL
+══════════════════════════════ */
+#page-park{background:#111;overflow:hidden}
+
+.pk-bg{
+  position:fixed;inset:0;
+  max-width:var(--max);margin:0 auto;
+  background-size:cover;background-position:center top;
+  z-index:0;transition:background-image .45s ease;
+}
+.pk-overlay{
+  position:fixed;inset:0;
+  max-width:var(--max);margin:0 auto;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.42) 0%,
+    rgba(0,0,0,.25) 22%,
+    rgba(255,255,255,.90) 40%,
+    rgba(255,255,255,.98) 100%
+  );
+  z-index:1;
+}
+
+.pk-content{position:relative;z-index:2;padding-bottom:90px;min-height:100vh}
+
+.pk-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1.45rem;font-weight:700;
+  color:#fff;text-transform:uppercase;
+  letter-spacing:.06em;
+  padding:50px 22px 30px;
+  text-shadow:0 2px 16px rgba(0,0,0,.5);
+  line-height:1.2;
+}
+
+.pk-body{
+  background:rgba(255,255,255,.97);
+  border-radius:22px 22px 0 0;
+  padding:24px 22px 20px;
+  margin-top:8px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  animation:slideUp .4s ease both;
+}
+
+.pk-intro{font-size:.80rem;color:var(--text-light);line-height:1.7;margin-bottom:20px}
+.pk-sec-title{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:.98rem;font-weight:700;font-style:italic;
+  color:var(--text);margin:18px 0 7px;
+}
+.pk-sec-text{font-size:.79rem;color:var(--text-light);line-height:1.7;margin-bottom:4px}
+
+/* bottom nav */
+.pk-nav{
+  position:fixed;bottom:0;
+  left:50%;transform:translateX(-50%);
+  width:100%;max-width:var(--max);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 30px 20px;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(8px);
+  border-top:1px solid rgba(0,0,0,.07);
+  z-index:10;
+}
+.pk-nav-btn{
+  background:none;border:none;
+  font-size:1.35rem;color:#777;
+  cursor:pointer;padding:8px 14px;
+  border-radius:8px;
+  transition:background .2s,color .2s;
+}
+.pk-nav-btn:hover{background:#ede8f7;color:var(--purple-dark)}
+.pk-home-btn{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:.70rem;letter-spacing:.14em;
+  color:var(--purple-mid);font-weight:700;
+  border:1.5px solid var(--purple-light)!important;
+  padding:8px 20px!important;font-size:.70rem!important;
+}
+.pk-home-btn:hover{background:#ede8f7!important}
+
+@media(min-width:500px){
+  .pk-bg,.pk-overlay{border-radius:38px}
+  .pk-nav{border-radius:0 0 38px 38px}
+}
+
+/* ── Animations ── */
+@keyframes slideUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
+.page.active .home-header,
+.page.active .home-info,
+.page.active .featured-box,
+.page.active .activities{
+  animation:fadeIn .4s ease both;
+}
+</style>
 </head>
 <body>
 
-    <main class="container">
-        <div class="header-image">
-            <img src="immagini/digitale.jpg" alt="Rappresentazione inquinamento digitale">
-            </div>
+<!-- ════════════════════════ HOME ════════════════════════ -->
+<div id="page-home" class="page active">
 
-        <h1 class="main-title">Il mondo digitale non è sostenibile</h1>
+  <div class="home-header">
+    <h1 class="home-title">HOME</h1>
+  </div>
 
-        <section class="content">
-            
-            <div class="text-block">
-                <p><span class="highlight-red">Il digitale</span> viene spesso considerato sostenibile perché percepito come immateriale, ma questa idea è in gran parte un mito. Dietro internet, le piattaforme online e i servizi digitali esistono infrastrutture fisiche complesse che richiedono grandi quantità di energia e risorse naturali. Il passaggio dall'analogico al digitale non comporta automaticamente una riduzione dell'impatto ambientale, ma spesso ne sposta semplicemente le conseguenze su altri livelli meno visibili.</p>
-            </div>
+  <div class="home-info">
+    <span class="info-tag">info</span>
+    <p class="info-body">
+      Dalle architetture barocche agli affacci sul mare, scopri le piazze
+      simbolo delle province siciliane. Un viaggio tra storia, arte e vita
+      quotidiana nel cuore pulsante dell'isola.
+    </p>
+  </div>
 
-            <div class="text-block">
-                <p>Uno degli aspetti più critici riguarda i consumi energetici. I data center, che permettono il funzionamento del cloud, dello streaming, dei social network e dell'intelligenza artificiale, devono essere attivi ininterrottamente e necessitano di sistemi di raffreddamento molto energivori. Con lo sviluppo di tecnologie come AI, 5G, blockchain e Internet delle cose, la domanda di energia continua a crescere, aumentando le emissioni e la pressione sulle risorse.</p>
-            </div>
+  <!-- Featured -->
+  <div class="featured-box">
+    <h2 class="featured-heading">Parchi in primo piano</h2>
 
-            <div class="text-block">
-                <p>Il digitale è inoltre profondamente materiale: smartphone, computer e altri dispositivi richiedono grandi quantità di materie prime, spesso rare, e l'uso di combustibili fossili durante la produzione. La rapida obsolescenza tecnologica e gli aggiornamenti software riducono la durata dei dispositivi, generando una quantità crescente di rifiuti elettronici difficili da riciclare e smaltire. Anche fenomeni come il mining delle criptovalute mostrano un consumo energetico estremo e poco sostenibile.</p>
-            </div>
+    <div class="carousel-wrap">
+      <button class="c-btn" id="btnPrev" aria-label="Precedente">&#8592;</button>
 
-            <div class="text-block">
-                <p>Infine, l'idea che il commercio online sia più ecologico rispetto a quello tradizionale è discutibile. Le spedizioni frequenti, gli imballaggi e le consegne rapide aumentano l'impatto ambientale e spesso incentivano un maggiore consumo. Secondo l'articolo, la sostenibilità digitale non può essere affidata solo all'innovazione tecnologica, ma richiede politiche adeguate, progettazione di prodotti più duraturi e una reale riduzione dei consumi complessivi.</p>
-            </div>
+      <div class="c-viewport">
+        <div class="c-track" id="cTrack">
+           <button img src="immagini/1024x681-Duomo-di-Messina.jpg" aria-label="messina"></button>
+          <!-- Slides generated by JS -->
+        </div>
+      </div>
 
-        </section>
-    </main>
+      <button class="c-btn" id="btnNext" aria-label="Successivo">&#8594;</button>
+    </div>
 
+    <div class="c-dots" id="cDots"></div>
+  </div>
+
+  <!-- Attività -->
+  <div class="activities">
+    <h2 class="act-title">Attività</h2>
+    <div class="act-grid">
+      <div class="act-card"><img src="immagini/ChatGPT Image 14 mar 2026, 15_52_36 copia 2.png" alt="Festival" loading="lazy"/></div>
+      <div class="act-card"><img src="immagini/ChatGPT Image 14 mar 2026, 15_52_36 copia 3.png" alt="Concerto" loading="lazy"/></div>
+      <div class="act-card"><img src="immagini/ChatGPT Image 14 mar 2026, 15_52_36 copia.png" alt="Gastronomia" loading="lazy"/></div>
+      <div class="act-card"><img src="immagini/ChatGPT Image 14 mar 2026, 15_52_36.png"Ristorazione" loading="lazy"/></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════ PARK DETAIL ════════════════════════ -->
+<div id="page-park" class="page">
+  <div class="pk-bg" id="pkBg"></div>
+  <div class="pk-overlay"></div>
+  <div class="pk-content">
+    <h1 class="pk-name" id="pkName"></h1>
+    <div class="pk-body" id="pkBody">
+      <p class="pk-intro" id="pkIntro"></p>
+      <h3 class="pk-sec-title">Storia</h3>
+      <p class="pk-sec-text" id="pkStoria"></p>
+      <h3 class="pk-sec-title">Architettura e monumenti</h3>
+      <p class="pk-sec-text" id="pkArch"></p>
+      <p class="pk-sec-text" id="pkExtra"></p>
+    </div>
+  </div>
+  <nav class="pk-nav">
+    <button class="pk-nav-btn" id="btnParkPrev">&#8592;</button>
+    <button class="pk-nav-btn pk-home-btn" id="btnParkHome">HOME</button>
+    <button class="pk-nav-btn" id="btnParkNext">&#8594;</button>
+  </nav>
+</div>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+const parks = [
+  {
+    id:'messina',
+    name:'Duomo di Messina',
+    img:'https://images.unsplash.com/photo-1548013146-72479768bada?w=800&q=80',
+    intro:'Il Duomo di Messina è una delle cattedrali più imponenti della Sicilia, simbolo della città ricostruita dopo il devastante terremoto del 1908.',
+    storia:'Fondato in età normanna nel XII secolo, il duomo fu quasi completamente distrutto dal terremoto del 1908. La ricostruzione fedele all\'originale durò decenni e restituì alla città uno dei suoi simboli più amati.',
+    arch:'La facciata è un capolavoro di architettura gotico-normanna. Il campanile ospita il più grande orologio astronomico del mondo.',
+    extra:'La cattedrale custodisce preziosi mosaici medievali e la piazza antistante offre una vista panoramica sullo Stretto.'
+  },
+  {
+    id:'ragusa',
+    name:'Duomo di Ragusa Ibla',
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    intro:'Ragusa Ibla è la parte antica di Ragusa, dichiarata Patrimonio dell\'Umanità UNESCO. Il suo Duomo di San Giorgio è uno dei capolavori del barocco siciliano.',
+    storia:'Il Duomo fu ricostruito dopo il terremoto del 1693. L\'attuale struttura, progettata da Rosario Gagliardi, fu completata nel 1775.',
+    arch:'La facciata a torre è composta da tre livelli sovrapposti con colonne, nicchie e sculture che creano un effetto plastico straordinario.',
+    extra:'La scalinata monumentale che conduce al portale è uno degli scorci più fotografati di Sicilia.'
+  },
+  {
+    id:'siracusa',
+    name:'Piazza Duomo — Siracusa',
+    img:'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80',
+    intro:'Situata sull\'isola di Ortigia, Piazza Duomo è considerata una delle piazze barocche più eleganti d\'Italia.',
+    storia:'La Cattedrale sorge su un antico tempio greco dedicato ad Atena, del quale sono ancora visibili le colonne inglobate nella struttura.',
+    arch:'La piazza ospita il Palazzo Beneventano del Bosco e la Chiesa di Santa Lucia alla Badia, creando un insieme armonioso.',
+    extra:'Luce dorata al tramonto e spettacoli culturali rendono la piazza uno dei luoghi più suggestivi della Sicilia orientale.'
+  },
+  {
+    id:'catania',
+    name:'Piazza Duomo — Catania',
+    img:'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80',
+    intro:'Situata nel cuore del centro storico, Piazza del Duomo è il simbolo identitario di Catania. Patrimonio dell\'Umanità UNESCO.',
+    storia:'La piazza assunse la configurazione attuale dopo il terremoto del 1693. La ricostruzione barocca diede vita a uno degli spazi più scenografici dell\'isola.',
+    arch:'La Fontana dell\'Elefante è il simbolo della città. La Cattedrale di Sant\'Agata, il Palazzo degli Elefanti e la Porta Uzeda completano il complesso.',
+    extra:'Di sera si trasforma in uno scenario suggestivo, illuminato da luci calde che esaltano la pietra lavica.'
+  },
+  {
+    id:'palermo',
+    name:'Piazza Pretoria — Palermo',
+    img:'https://images.unsplash.com/photo-1529260830199-42c24126f198?w=800&q=80',
+    intro:'Nel cuore di Palermo, Piazza Pretoria è celebre per la monumentale fontana cinquecentesca che domina lo spazio urbano.',
+    storia:'La fontana fu realizzata a Firenze nel 1554 e trasferita a Palermo. Divenne nota come "Fontana della Vergogna" per la nudità delle sue statue.',
+    arch:'La Fontana Pretoria è composta da statue mitologiche e figure allegoriche su più livelli concentrici di straordinaria bellezza.',
+    extra:'È una delle piazze più fotografate della città, punto di partenza per visitare il centro storico palermitano.'
+  },
+  {
+    id:'agrigento',
+    name:'Piazza Pirandello — Agrigento',
+    img:'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&q=80',
+    intro:'Piazza Pirandello è il fulcro del centro storico di Agrigento e porta il nome del celebre drammaturgo agrigentino.',
+    storia:'La piazza è legata allo sviluppo urbano medievale della città, in prossimità della Valle dei Templi, uno dei siti più importanti al mondo.',
+    arch:'Dominata dal Palazzo di Città e dalla Chiesa di San Domenico, offre un punto panoramico privilegiato sul paesaggio collinare.',
+    extra:'Uno spazio di incontro tranquillo ma ricco di storia, dove si respira un forte senso di identità culturale.'
+  }
+];
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let currentSlide = 0;
+let currentPark = 0;
+let autoTimer = null;
+
+/* ══════════════════════════════════════════
+   BUILD CAROUSEL SLIDES
+══════════════════════════════════════════ */
+function buildCarousel() {
+  const track = document.getElementById('cTrack');
+  const dots  = document.getElementById('cDots');
+
+  track.innerHTML = '';
+  dots.innerHTML  = '';
+
+  parks.forEach((park, i) => {
+    /* slide */
+    const slide = document.createElement('div');
+    slide.className = 'c-slide';
+
+    const img = document.createElement('img');
+    img.src = park.img;
+    img.alt = park.name;
+    img.loading = 'lazy';
+
+    const label = document.createElement('a');
+    label.className = 'c-label';
+    label.textContent = park.name;
+    label.href = '#';
+    label.addEventListener('click', e => {
+      e.preventDefault();
+      openPark(i);
+    });
+
+    slide.appendChild(img);
+    slide.appendChild(label);
+    track.appendChild(slide);
+
+    /* dot */
+    const dot = document.createElement('span');
+    dot.className = 'c-dot' + (i === 0 ? ' on' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dots.appendChild(dot);
+  });
+
+  renderSlide();
+}
+
+/* ── move to slide ── */
+function goTo(idx) {
+  currentSlide = ((idx % parks.length) + parks.length) % parks.length;
+  renderSlide();
+}
+
+function renderSlide() {
+  document.getElementById('cTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.c-dot').forEach((d, i) =>
+    d.classList.toggle('on', i === currentSlide)
+  );
+}
+
+/* ══════════════════════════════════════════
+   PARK DETAIL
+══════════════════════════════════════════ */
+function openPark(idx) {
+  currentPark = idx;
+  renderPark();
+  showPage('page-park');
+  window.scrollTo(0, 0);
+}
+
+function renderPark() {
+  const p = parks[currentPark];
+  document.getElementById('pkBg').style.backgroundImage = `url('${p.img}')`;
+  document.getElementById('pkName').textContent = p.name;
+  document.getElementById('pkIntro').textContent = p.intro;
+  document.getElementById('pkStoria').textContent = p.storia;
+  document.getElementById('pkArch').textContent = p.arch;
+  document.getElementById('pkExtra').textContent = p.extra;
+
+  /* restart animation */
+  const body = document.getElementById('pkBody');
+  body.style.animation = 'none';
+  body.offsetHeight; /* reflow */
+  body.style.animation = '';
+}
+
+/* ══════════════════════════════════════════
+   PAGE SWITCH
+══════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   EVENT LISTENERS
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+
+  buildCarousel();
+
+  /* carousel arrows */
+  document.getElementById('btnPrev').addEventListener('click', () => {
+    goTo(currentSlide - 1);
+    resetAutoplay();
+  });
+  document.getElementById('btnNext').addEventListener('click', () => {
+    goTo(currentSlide + 1);
+    resetAutoplay();
+  });
+
+  /* park detail nav */
+  document.getElementById('btnParkPrev').addEventListener('click', () => {
+    currentPark = ((currentPark - 1) + parks.length) % parks.length;
+    renderPark();
+    window.scrollTo(0, 0);
+  });
+  document.getElementById('btnParkNext').addEventListener('click', () => {
+    currentPark = (currentPark + 1) % parks.length;
+    renderPark();
+    window.scrollTo(0, 0);
+  });
+  document.getElementById('btnParkHome').addEventListener('click', () => {
+    showPage('page-home');
+    window.scrollTo(0, 0);
+  });
+
+  /* swipe */
+  let tx = 0;
+  const vp = document.querySelector('.c-viewport');
+  vp.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive:true });
+  vp.addEventListener('touchend', e => {
+    const diff = tx - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) { goTo(currentSlide + (diff > 0 ? 1 : -1)); resetAutoplay(); }
+  }, { passive:true });
+
+  /* autoplay */
+  startAutoplay();
+});
+
+function startAutoplay() {
+  autoTimer = setInterval(() => {
+    if (document.getElementById('page-home').classList.contains('active')) {
+      goTo(currentSlide + 1);
+    }
+  }, 5000);
+}
+
+function resetAutoplay() {
+  clearInterval(autoTimer);
+  startAutoplay();
+}
+</script>
 </body>
 </html>
